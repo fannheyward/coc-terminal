@@ -1,0 +1,48 @@
+{
+  "name": "coc-terminal",
+  "version": "0.0.0-development",
+  "description": "Toggle terminal with coc.nvim",
+  "author": "Heyward Fann <fannheyward@gmail.com>",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "coc.nvim"
+  ],
+  "engines": {
+    "coc": "^0.0.70"
+  },
+  "scripts": {
+    "clean": "rimraf lib",
+    "watch": "webpack --watch",
+    "build": "webpack",
+    "prepare": "npx npm-run-all clean build"
+  },
+  "devDependencies": {
+    "@types/node": "^12.7.1",
+    "coc.nvim": "^0.0.73",
+    "rimraf": "^3.0.0",
+    "ts-loader": "^6.0.4",
+    "typescript": "^3.5.3",
+    "webpack": "^4.39.2",
+    "webpack-cli": "^3.3.6"
+  },
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "coc-terminal configuration",
+      "properties": {
+        "coc-terminal.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable coc-terminal extension"
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "coc-terminal.Command",
+        "title": "coc-terminal command title"
+      }
+    ]
+  }
+}
