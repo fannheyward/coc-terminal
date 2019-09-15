@@ -4,8 +4,6 @@ let terminal: Terminal | undefined;
 let showing: boolean = false;
 
 export async function activate(context: ExtensionContext): Promise<void> {
-  workspace.showMessage(`coc-terminal works!`);
-
   context.subscriptions.push(
     commands.registerCommand('terminal.Toggle', async () => {
       await toggle();
