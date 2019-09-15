@@ -1,6 +1,6 @@
 {
   "name": "coc-terminal",
-  "version": "0.0.0-development",
+  "version": "0.1.0",
   "description": "Toggle terminal with coc.nvim",
   "author": "Heyward Fann <fannheyward@gmail.com>",
   "license": "MIT",
@@ -27,21 +27,14 @@
     "webpack-cli": "^3.3.6"
   },
   "contributes": {
-    "configuration": {
-      "type": "object",
-      "title": "coc-terminal configuration",
-      "properties": {
-        "coc-terminal.enabled": {
-          "type": "boolean",
-          "default": true,
-          "description": "Enable coc-terminal extension"
-        }
-      }
-    },
     "commands": [
       {
-        "command": "coc-terminal.Command",
-        "title": "coc-terminal command title"
+        "command": "terminal.Toggle",
+        "title": "Toggle terminal showing"
+      },
+      {
+        "command": "terminal.Destroy",
+        "title": "Destroy and free terminal"
       }
     ]
   }
