@@ -33,6 +33,10 @@
         "title": "Toggle terminal showing"
       },
       {
+        "command": "terminal.REPL",
+        "title": "Create REPL for file"
+      },
+      {
         "command": "terminal.Destroy",
         "title": "Destroy and free terminal"
       }
