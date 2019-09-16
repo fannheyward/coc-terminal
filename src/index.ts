@@ -28,6 +28,14 @@ export async function activate(context: ExtensionContext): Promise<void> {
 }
 
 async function toggle(): Promise<void> {
+  if (terminal) {
+    const doc = await workspace.getDocument(terminal.bufnr);
+    if (doc) {
+      workspace.jumpTo(doc.uri);
+    } else {
+      terminal = undefined;
+    }
+  }
   if (!terminal) {
     terminal = await workspace.createTerminal({ name: 'coc-terminal' });
     if (!terminal) {
