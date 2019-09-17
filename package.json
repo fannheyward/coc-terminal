@@ -34,7 +34,7 @@
       },
       {
         "command": "terminal.REPL",
-        "title": "Create REPL for file"
+        "title": "Create REPL for current file"
       },
       {
         "command": "terminal.Destroy",
