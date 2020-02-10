@@ -18,6 +18,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
       if (terminal) {
         terminal.dispose();
         terminal = null;
+        showing = false
       }
     }),
 
