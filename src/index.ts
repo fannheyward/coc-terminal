@@ -1,7 +1,7 @@
-import { Terminal, commands, ExtensionContext, workspace } from 'coc.nvim';
+import { commands, ExtensionContext, Terminal, workspace } from 'coc.nvim';
 
 const replAvailableLanguages = ['javascript', 'typescript', 'python'];
-let terminal: Terminal | undefined;
+let terminal: Terminal | null = null;
 let showing: boolean = false;
 
 export async function activate(context: ExtensionContext): Promise<void> {
@@ -17,7 +17,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
     commands.registerCommand('terminal.Destroy', () => {
       if (terminal) {
         terminal.dispose();
-        terminal = undefined;
+        terminal = null;
       }
     }),
 
@@ -33,25 +33,12 @@ export async function activate(context: ExtensionContext): Promise<void> {
 }
 
 async function toggle(): Promise<void> {
-  if (terminal) {
-    const doc = workspace.getDocument(terminal.bufnr);
-    if (doc) {
-      workspace.jumpTo(doc.uri);
-    } else {
-      terminal.dispose();
-      terminal = undefined;
-    }
-  }
   if (!terminal) {
     terminal = await workspace.createTerminal({ name: 'coc-terminal' });
     if (!terminal) {
       workspace.showMessage(`Create terminal failed`, 'error');
       return;
     }
-
-    terminal.show();
-    showing = true;
-    return;
   }
 
   if (showing) {
