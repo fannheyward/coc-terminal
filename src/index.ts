@@ -1,4 +1,4 @@
-import { commands, ExtensionContext, Terminal, workspace, events } from 'coc.nvim';
+import { commands, ExtensionContext, Terminal, workspace, events, window } from 'coc.nvim';
 import which from "which"
 
 const replAvailableLanguages = ['javascript', 'typescript', 'python'];
@@ -33,32 +33,32 @@ export async function activate(context: ExtensionContext): Promise<void> {
     )
   );
 
-    events.on('BufHidden', async (bufnr) => {
-        if (terminal?.bufnr === bufnr) {
-            showing = false
-        }
-    });
+  events.on('BufHidden', async (bufnr) => {
+    if (terminal?.bufnr === bufnr) {
+      showing = false
+    }
+  });
 
-    events.on('BufUnload', async (bufnr) => {
-        if (terminal?.bufnr === bufnr) {
-            terminal = null
-            showing = false
-        }
-    });
+  events.on('BufUnload', async (bufnr) => {
+    if (terminal?.bufnr === bufnr) {
+      terminal = null
+      showing = false
+    }
+  });
 
-    events.on('BufEnter', async (bufnr) => {
-        if (terminal?.bufnr === bufnr) {
-            terminal.sendText("", false)
-            await workspace.nvim.command('startinsert');
-        }
-    });
+  events.on('BufEnter', async (bufnr) => {
+    if (terminal?.bufnr === bufnr) {
+      terminal.sendText("", false)
+      await workspace.nvim.command('startinsert');
+    }
+  });
 }
 
 async function toggle(): Promise<void> {
   if (!terminal) {
     terminal = await workspace.createTerminal({ name: 'coc-terminal' });
     if (!terminal) {
-      workspace.showMessage(`Create terminal failed`, 'error');
+      window.showMessage(`Create terminal failed`, 'error');
       return;
     }
   }
@@ -76,7 +76,7 @@ async function repl(): Promise<void> {
   const { nvim } = workspace;
   const filetype = await nvim.eval('&filetype');
   if (!replAvailableLanguages.includes(filetype.toString())) {
-    workspace.showMessage(`No REPL support for ${filetype} yet`, 'warning');
+    window.showMessage(`No REPL support for ${filetype} yet`, 'warning');
     return;
   }
 
@@ -84,7 +84,7 @@ async function repl(): Promise<void> {
   if (filetype === 'javascript') {
     prog = 'node';
   } else if (filetype === 'typescript') {
-    prog = which.sync('ts-node', {nothrow: true}) ? 'ts-node' : 'node';
+    prog = which.sync('ts-node', { nothrow: true }) ? 'ts-node' : 'node';
   } else if (filetype === 'python') {
     prog = 'python';
   }
@@ -94,7 +94,7 @@ async function repl(): Promise<void> {
   }
   terminal = await workspace.createTerminal({ name: 'coc-terminal' });
   if (!terminal) {
-    workspace.showMessage(`Create terminal failed`, 'error');
+    window.showMessage(`Create terminal failed`, 'error');
     return;
   }
 
