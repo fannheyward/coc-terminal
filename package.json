@@ -30,6 +30,25 @@
     "which": "^2.0.2"
   },
   "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "coc-terminal configuration",
+      "properties": {
+        "terminal.shellPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to a custom shell executable to be used in the terminal"
+        },
+        "terminal.shellArgs": {
+          "type": "array",
+          "default": [],
+          "description": "Args for the custom shell executable",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "commands": [
       {
         "command": "terminal.Toggle",

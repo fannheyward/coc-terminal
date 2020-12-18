@@ -56,7 +56,10 @@ export async function activate(context: ExtensionContext): Promise<void> {
 
 async function toggle(): Promise<void> {
   if (!terminal) {
-    terminal = await workspace.createTerminal({ name: 'coc-terminal' });
+    const config = workspace.getConfiguration('terminal');
+    const shellPath = config.get<string>('shellPath');
+    const shellArgs = config.get<string[]>('shellArgs');
+    terminal = await workspace.createTerminal({ name: 'coc-terminal', shellPath, shellArgs });
     if (!terminal) {
       window.showMessage(`Create terminal failed`, 'error');
       return;
@@ -92,7 +95,11 @@ async function repl(): Promise<void> {
   if (terminal) {
     terminal.dispose();
   }
-  terminal = await workspace.createTerminal({ name: 'coc-terminal' });
+
+  const config = workspace.getConfiguration('terminal');
+  const shellPath = config.get<string>('shellPath');
+  const shellArgs = config.get<string[]>('shellArgs');
+  terminal = await workspace.createTerminal({ name: 'coc-terminal', shellPath, shellArgs });
   if (!terminal) {
     window.showMessage(`Create terminal failed`, 'error');
     return;
