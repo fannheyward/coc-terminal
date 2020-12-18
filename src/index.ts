@@ -1,4 +1,5 @@
-import { commands, ExtensionContext, Terminal, workspace } from 'coc.nvim';
+import { commands, ExtensionContext, Terminal, workspace, events } from 'coc.nvim';
+import which from "which"
 
 const replAvailableLanguages = ['javascript', 'typescript', 'python'];
 let terminal: Terminal | null = null;
@@ -31,6 +32,26 @@ export async function activate(context: ExtensionContext): Promise<void> {
       { sync: false }
     )
   );
+
+    events.on('BufHidden', async (bufnr) => {
+        if (terminal?.bufnr === bufnr) {
+            showing = false
+        }
+    });
+
+    events.on('BufUnload', async (bufnr) => {
+        if (terminal?.bufnr === bufnr) {
+            terminal = null
+            showing = false
+        }
+    });
+
+    events.on('BufEnter', async (bufnr) => {
+        if (terminal?.bufnr === bufnr) {
+            terminal.sendText("", false)
+            await workspace.nvim.command('startinsert');
+        }
+    });
 }
 
 async function toggle(): Promise<void> {
@@ -63,7 +84,7 @@ async function repl(): Promise<void> {
   if (filetype === 'javascript') {
     prog = 'node';
   } else if (filetype === 'typescript') {
-    prog = 'ts-node';
+    prog = which.sync('ts-node', {nothrow: true}) ? 'ts-node' : 'node';
   } else if (filetype === 'python') {
     prog = 'python';
   }
