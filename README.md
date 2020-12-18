@@ -13,7 +13,7 @@ Toggle terminal with coc.nvim. Inspired by [repl with coc.nvim](https://gist.git
 ## Commands
 
 - `terminal.Toggle`: Show/hide terminal
-- `terminal.REPL`: Create REPL for current file, only support `JS`, `TS`, `Python` for now
+- `terminal.REPL`: Create REPL for current file, only support `JS`, `TS`, `Python`, `C++` for now
 - `terminal.Destroy`: Destroy and free terminal
 
 ## License

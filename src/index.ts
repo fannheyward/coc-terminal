@@ -1,7 +1,7 @@
 import { commands, ExtensionContext, Terminal, workspace, events, window } from 'coc.nvim';
 import which from "which"
 
-const replAvailableLanguages = ['javascript', 'typescript', 'python'];
+const replAvailableLanguages = ['javascript', 'typescript', 'python', 'cpp', 'c'];
 let terminal: Terminal | null = null;
 let showing: boolean = false;
 
@@ -90,6 +90,8 @@ async function repl(): Promise<void> {
     prog = which.sync('ts-node', { nothrow: true }) ? 'ts-node' : 'node';
   } else if (filetype === 'python') {
     prog = 'python';
+  } else if (filetype === 'cpp' || filetype === 'c') {
+    prog = 'cling';
   }
 
   if (terminal) {
