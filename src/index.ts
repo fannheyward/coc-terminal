@@ -1,7 +1,5 @@
 import { commands, ExtensionContext, Terminal, workspace, events, window } from 'coc.nvim';
-import which from "which"
 
-const replAvailableLanguages = ['javascript', 'typescript', 'python', 'cpp', 'c'];
 let terminal: Terminal | null = null;
 let showing: boolean = false;
 
@@ -76,29 +74,21 @@ async function toggle(): Promise<void> {
 }
 
 async function repl(): Promise<void> {
-  const { nvim } = workspace;
-  const filetype = await nvim.eval('&filetype');
-  if (!replAvailableLanguages.includes(filetype.toString())) {
-    window.showMessage(`No REPL support for ${filetype} yet`, 'warning');
+  const doc = await workspace.document;
+  if (!doc.filetype) {
+    window.showMessage(`Unknown buffer filetype ${doc.filetype}`, 'warning');
     return;
   }
 
-  let prog = '';
-  if (filetype === 'javascript') {
-    prog = 'node';
-  } else if (filetype === 'typescript') {
-    prog = which.sync('ts-node', { nothrow: true }) ? 'ts-node' : 'node';
-  } else if (filetype === 'python') {
-    prog = 'python';
-  } else if (filetype === 'cpp' || filetype === 'c') {
-    prog = 'cling';
-  }
-
-  if (terminal) {
-    terminal.dispose();
-  }
-
   const config = workspace.getConfiguration('terminal');
+  const mappings = config.get('REPLMappings', {})
+  const prog = mappings[doc.filetype]
+  if (!prog) {
+    window.showMessage(`No REPL program found for ${doc.filetype}, you can custom it with "terminal.REPLMappings"`, 'warning');
+    return;
+  }
+
+  if (terminal) terminal.dispose();
   const shellPath = config.get<string>('shellPath');
   const shellArgs = config.get<string[]>('shellArgs');
   terminal = await workspace.createTerminal({ name: 'coc-terminal', shellPath, shellArgs });
@@ -108,6 +98,6 @@ async function repl(): Promise<void> {
   }
 
   terminal.sendText(prog, true);
-  await nvim.command('startinsert');
+  await workspace.nvim.command('startinsert');
   showing = true;
 }
