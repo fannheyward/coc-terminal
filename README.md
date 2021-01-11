@@ -10,6 +10,19 @@ Toggle terminal with coc.nvim. Inspired by [repl with coc.nvim](https://gist.git
 
 `<Plug>(coc-terminal-toggle)`: toggle terminal show/hide
 
+## Configurations
+
+- `terminal.REPLMappings`: association overrides between file types and the
+  command called for their REPL, default:
+
+      {
+        "c": "cling",
+        "cpp": "cling",
+        "javascript": "node",
+        "typescript": "ts-node",
+        "python": "python"
+      }
+
 ## Commands
 
 - `terminal.Toggle`: Show/hide terminal
